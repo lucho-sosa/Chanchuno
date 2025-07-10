@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Chanchuno.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Chanchuno.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Chanchuno.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Chanchuno.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Chanchuno.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Chanchuno.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chanchuno/Chanchuno.chanchuno.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/chanchuno/Chanchuno.chanchuno.unitTest.iml" />
     </modules>
   </component>
 </project>
