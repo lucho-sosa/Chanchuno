@@ -1,10 +1,10 @@
 package com.example.luciano.chanchuno
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Handler
 import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,14 +12,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnLongClickListener
 import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.luciano.chanchuno.jugadorAdapter.jugadorViewHolder
-import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import me.toptas.fancyshowcase.FocusShape
 import me.toptas.fancyshowcase.OnViewInflateListener
@@ -51,22 +49,8 @@ class jugadorAdapter(private val jugadors: MutableList<String>, contexto: Contex
             val act = contexto as Activity
             val imm = contexto.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(act.currentFocus?.windowToken, 0)
-            val handler = Handler()
-            holder.editar.viewTreeObserver.addOnGlobalLayoutListener(
-                object : OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        // Layout has happened here.
-                        handler.postDelayed({ llamarTutorial() }, 1000)
-                        holder.editar.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        // Don't forget to remove your listener when you are done with it.
-                    }
-                })
             preferences.edit().putBoolean("tutorial01", false).apply()
         }
-    }
-
-    fun llamarTutorial() {
-        FancyShowCaseQueue().add(obtenerCases()).show()
     }
 
     override fun getItemCount(): Int {
@@ -74,9 +58,8 @@ class jugadorAdapter(private val jugadors: MutableList<String>, contexto: Contex
     }
 
     override var contexto: Context
-        get() = TODO("Not yet implemented")
-        set(value) {}
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun itemLongClick(v: View?, position: Int) {
         jugadors.removeAt(position)
         notifyDataSetChanged()
@@ -157,11 +140,12 @@ class jugadorAdapter(private val jugadors: MutableList<String>, contexto: Contex
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     companion object {
-        private val contexto: Context = TODO()
+        private val contexto: Context? = null
+
         private var v2: FancyShowCaseView? = null
 
-        //Guardamos un holder para usarlo en el tutorial despues
         private var holderGuardado: jugadorViewHolder? = null
         @JvmStatic
         fun obtenerCases(): FancyShowCaseView? {
