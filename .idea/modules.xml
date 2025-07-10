@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chanchuno/AndroidStudioProjects.Chanchuno.chanchuno.iml" filepath="$PROJECT_DIR$/.idea/modules/chanchuno/AndroidStudioProjects.Chanchuno.chanchuno.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chanchuno/AndroidStudioProjects.Chanchuno.chanchuno.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/chanchuno/AndroidStudioProjects.Chanchuno.chanchuno.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chanchuno/AndroidStudioProjects.Chanchuno.chanchuno.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chanchuno/AndroidStudioProjects.Chanchuno.chanchuno.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Chanchuno.iml" filepath="$PROJECT_DIR$/.idea/modules/Chanchuno.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chanchuno/Chanchuno.chanchuno.iml" filepath="$PROJECT_DIR$/.idea/modules/chanchuno/Chanchuno.chanchuno.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chanchuno/Chanchuno.chanchuno.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/chanchuno/Chanchuno.chanchuno.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chanchuno/Chanchuno.chanchuno.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chanchuno/Chanchuno.chanchuno.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/chanchuno/Chanchuno.chanchuno.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/chanchuno/Chanchuno.chanchuno.unitTest.iml" />
     </modules>
   </component>
