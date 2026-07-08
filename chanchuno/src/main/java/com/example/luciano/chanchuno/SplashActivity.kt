@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
 import com.example.luciano.chanchuno.MainActivity
+import com.google.android.gms.ads.MobileAds
 import java.util.Timer
 import java.util.TimerTask
 
@@ -18,6 +19,7 @@ class SplashActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         setContentView(R.layout.loadscreen)
+        MobileAds.initialize(this) {}
         val task: TimerTask = object : TimerTask() {
             override fun run() {
                 val mainIntent = Intent().setClass(

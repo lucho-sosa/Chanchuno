@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 
 class PartidaBaseAdapter internal constructor(
     private val item: Array<Array<String?>>,
@@ -29,20 +30,46 @@ class PartidaBaseAdapter internal constructor(
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
-        val vista = view?.inflate(R.layout.cv_partida, null)
-        val imageView = vista?.findViewById<ImageView>(R.id.fotocarnet)
-        val nombrejugador = vista?.findViewById<TextView>(R.id.tvNombreJugadorPartida)
-        val chancho = vista?.findViewById<TextView>(R.id.tvchancho)
-        nombrejugador?.text = item[position][0]
-        chancho?.text = item[position][1]
-        val resImagen = context.resources.getIdentifier(
-            "drawable/" + item[position][2],
-            null,
-            context.packageName
-        )
-        imageView?.setImageResource(resImagen)
+        val vista: View
+        val holder: ViewHolder
+
+        if (convertView == null) {
+            vista = view!!.inflate(R.layout.cv_partida, parent, false)
+            holder = ViewHolder(
+                imageView = vista.findViewById(R.id.fotocarnet),
+                nombrejugador = vista.findViewById(R.id.tvNombreJugadorPartida),
+                chancho = vista.findViewById(R.id.tvchancho)
+            )
+            vista.tag = holder
+        } else {
+            vista = convertView
+            holder = vista.tag as ViewHolder
+        }
+
+        holder.nombrejugador.text = item[position][0]
+        holder.chancho.text = item[position][1]
+        holder.imageView.setImageResource(drawableFor(item[position][2]))
+
         return vista
     }
+
+    @DrawableRes
+    private fun drawableFor(nombre: String?): Int {
+        return when (nombre) {
+            "pig1" -> R.drawable.pig1
+            "pig3" -> R.drawable.pig3
+            "pig5" -> R.drawable.pig5
+            "pig6" -> R.drawable.pig6
+            "pig18" -> R.drawable.pig18
+            else -> R.drawable.pig1
+        }
+    }
+
+    private class ViewHolder(
+        val imageView: ImageView,
+        val nombrejugador: TextView,
+        val chancho: TextView
+    )
 
     companion object {
         private var view: LayoutInflater? = null

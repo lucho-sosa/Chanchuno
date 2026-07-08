@@ -9,9 +9,18 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
 class partida : AppCompatActivity() {
     private var lista: ListView? = null
+    private var adView: AdView? = null
+    private var interstitialAd: InterstitialAd? = null
 
 
     //La primera columna de la matriz contiene los nombres de los jugadores
@@ -25,6 +34,9 @@ class partida : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_partida)
+        adView = findViewById(R.id.adViewPartida)
+        adView?.loadAd(AdRequest.Builder().build())
+        cargarInterstitial()
 
 
         jugadors = intent.getStringArrayListExtra("jugadores")
@@ -42,7 +54,7 @@ class partida : AppCompatActivity() {
             val tvChancho = view.findViewById<TextView>(R.id.tvchancho)
             val imagenChancho = view.findViewById<ImageView>(R.id.fotocarnet)
             val tvNombre = view.findViewById<TextView>(R.id.tvNombreJugadorPartida)
-            val posicion = tvChancho.text.length + 1
+            val posicion = jugadores[position][1]!!.length + 1
             if (posicion < 7) {
                 val prueba = CHANCHO_NOMBRE.substring(0, posicion)
                 jugadores[position][1] = prueba
@@ -81,7 +93,7 @@ class partida : AppCompatActivity() {
         }
         lista?.setOnItemLongClickListener { _, view, position, _ ->
             val tvChancho = view.findViewById<TextView>(R.id.tvchancho)
-            val posicion = tvChancho.text.length
+            val posicion = jugadores[position][1]!!.length
             if (posicion in 1..7) {
                 val prueba = CHANCHO_NOMBRE.substring(0, posicion - 1)
                 tvChancho.text = prueba
@@ -95,7 +107,44 @@ class partida : AppCompatActivity() {
         }
     }
 
+    private fun cargarInterstitial() {
+        InterstitialAd.load(
+            this,
+            INTERSTITIAL_AD_UNIT_ID,
+            AdRequest.Builder().build(),
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    interstitialAd = ad
+                }
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    interstitialAd = null
+                }
+            }
+        )
+    }
+
     private fun mostrarGanador() {
+        val ad = interstitialAd
+        if (ad == null) {
+            mostrarDialogoGanador()
+            return
+        }
+        ad.fullScreenContentCallback = object : FullScreenContentCallback() {
+            override fun onAdDismissedFullScreenContent() {
+                interstitialAd = null
+                mostrarDialogoGanador()
+            }
+
+            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                interstitialAd = null
+                mostrarDialogoGanador()
+            }
+        }
+        ad.show(this)
+    }
+
+    private fun mostrarDialogoGanador() {
         val builder = AlertDialog.Builder(this)
         val layoutInflater = (getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater)
         val v = layoutInflater.inflate(R.layout.ganador, null)
@@ -128,5 +177,24 @@ class partida : AppCompatActivity() {
         adapter!!.notifyDataSetChanged()
         //Por alguna extraña razón que desconozco clear debe ir despues de la notificación.
         jugadoresBackUp.clear()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adView?.resume()
+    }
+
+    override fun onPause() {
+        adView?.pause()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        adView?.destroy()
+        super.onDestroy()
+    }
+
+    companion object {
+        private const val INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-6353529381545594/8607716938"
     }
 }

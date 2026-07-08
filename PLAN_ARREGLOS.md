@@ -1,0 +1,20 @@
+# Plan de arreglos - Chanchuno
+
+Seguimiento de los problemas detectados en la revisión de código del 2026-07-07.
+
+| # | Error | Archivo | Solución propuesta | Estado |
+|---|-------|---------|---------------------|--------|
+| 1 | Crash al agregar un jugador con un nombre de solo espacios (`" "`): la validación de vacío se hace antes del `trim()`, y luego `playerName[0]` explota con `StringIndexOutOfBoundsException` | `MainActivity.kt` (función `agregar`) | Validar el nombre **después** de aplicar `trim()`, y mostrar el Toast de "ingresa un nombre" si queda vacío | Finalizada |
+| 2 | Código muerto y roto: `obtenerCases()` usa una `contexto` del companion object que siempre es `null`, lo que provocaría un `NullPointerException` si se llamara (no se usa en ningún lado actualmente) | `jugadorAdapter.kt` | Eliminar `obtenerCases()`, la variable `contexto` del companion, `v2`, `holderGuardado` y, si no se usa en otro lado, la dependencia `FancyShowCaseView` | Finalizada |
+| 3 | `getView` no recicla `convertView`, infla una vista nueva en cada llamada (ineficiente, puede causar lag con más jugadores) y busca el drawable por nombre de string (`getIdentifier`), frágil ante renombres | `PartidaBaseAdapter.kt` | Reutilizar `convertView` con patrón ViewHolder y reemplazar `getIdentifier` por un mapeo directo (ej. `when`) de nombre a `@DrawableRes` | Finalizada |
+| 4 | La lógica de progreso de "CHANCHO" se lee del texto del `TextView` (`tvChancho.text.length`) en vez de la matriz `jugadores`, que es la fuente de verdad real. Solo funciona hoy porque el adapter no recicla vistas (ver #3) | `partida.kt` | Calcular la posición a partir de `jugadores[position][1]` en vez del texto de la vista, para que sea independiente del reciclaje de vistas | Finalizada |
+| 5 | `build.gradle` raíz sigue declarando el repositorio `jcenter()`, apagado desde 2022 | `build.gradle` (raíz) | Se reemplazó `jcenter()` por `mavenCentral()` (en vez de solo borrarlo) en `buildscript` y `allprojects`, porque no había otro repositorio que cubriera dependencias como `kotlin-gradle-plugin` o `junit`, que no están en `google()` | Finalizada |
+| 6 | Dependencia `firebase-core` y metadata de AdMob en el manifest con un App ID de ejemplo, sin SDK de anuncios real: integración iniciada y abandonada | `build.gradle` (app), `AndroidManifest.xml` | Se decidió implementar AdMob de verdad (no solo limpiar): se agregó `play-services-ads:23.3.0` en reemplazo de `firebase-core`, se inicializó el SDK en `SplashActivity`, se agregó un banner arriba en `MainActivity` y `partida` (con ciclo de vida pause/resume/destroy), y un intersticial que se muestra al terminar la partida (`partida.kt`, antes de mostrar el diálogo de ganador). Se usan los IDs de test oficiales de Google, marcados con `TODO` en el manifest, los dos layouts y `partida.kt` para reemplazarlos por los reales antes de publicar | Finalizada |
+
+## Notas
+- Priorizar primero el ítem 1 (crash reproducible) y el 2 (código muerto/roto), son los de mayor impacto y menor esfuerzo.
+- Los ítems 3 y 4 conviene resolverlos juntos, ya que arreglar el reciclaje de vistas sin corregir la fuente de verdad del progreso reintroduciría el bug.
+- Ítem 6 actualizado: ya se cargaron todos los IDs reales de AdMob provistos por el usuario: App ID (`AndroidManifest.xml`), Ad Unit ID del banner (mismo ID reutilizado en `activity_main.xml` y `activity_partida.xml`) y Ad Unit ID del intersticial (`INTERSTITIAL_AD_UNIT_ID` en `partida.kt`). Ya no queda ningún ID de test de Google en el proyecto — falta probar en dispositivo real antes de publicar, ya que con IDs reales y sin tráfico de test, AdMob puede tardar en servir anuncios o directamente no rellenar (fill rate) en cuentas nuevas.
+- No se pudo compilar el proyecto en este entorno (no hay JDK instalado); falta verificar en Android Studio o con un dispositivo/emulador que el proyecto sincroniza y compila bien tras el cambio de repositorio, y que los anuncios cargan correctamente.
+
+Todos los ítems del plan quedaron **Finalizados**.

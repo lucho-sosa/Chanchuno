@@ -18,6 +18,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.net.toUri
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private var layoutManager: RecyclerView.LayoutManager? = null
     private var lista: RecyclerView? = null
     private var toolbar: Toolbar? = null
+    private var adView: AdView? = null
     private var borrar = false
     private var jugadors = ArrayList<String>()
 
@@ -88,14 +91,37 @@ class MainActivity : AppCompatActivity() {
         etNombre = findViewById<View>(R.id.etNombreJugador) as EditText
         btnagregar = findViewById<View>(R.id.btnAgregar) as Button
         btncomenzar = findViewById<View>(R.id.floatingActionButton2) as FloatingActionButton
+        adView = findViewById(R.id.adViewMain)
+        adView?.loadAd(AdRequest.Builder().build())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adView?.resume()
+        if (borrar) {
+            jugadors.clear()
+            adapter?.notifyDataSetChanged()
+            borrar = false
+        }
+    }
+
+    override fun onPause() {
+        adView?.pause()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        adView?.destroy()
+        super.onDestroy()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun agregar(view: View?) {
-        if (etNombre!!.text.toString().isEmpty()) {
+        val playerNameTrimmed = etNombre!!.text.toString().trim()
+        if (playerNameTrimmed.isEmpty()) {
             Toast.makeText(this, "Ingres algun nombre de jugador", Toast.LENGTH_SHORT).show()
         } else {
-            var playerName = etNombre!!.text.toString().trim()
+            var playerName = playerNameTrimmed
             playerName = playerName[0].uppercaseChar().toString() + playerName.substring(1, playerName.length)
             if (jugadors.size == 12) {
                 Toast.makeText(this, "Maximo 12 jugadores", Toast.LENGTH_SHORT).show()
@@ -133,15 +159,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, partida::class.java)
             intent.putExtra("jugadores", jugadors)
             startActivity(intent)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (borrar) {
-            jugadors.clear()
-            adapter?.notifyDataSetChanged()
-            borrar = false
         }
     }
 }

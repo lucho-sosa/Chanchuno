@@ -18,9 +18,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.luciano.chanchuno.jugadorAdapter.jugadorViewHolder
-import me.toptas.fancyshowcase.FancyShowCaseView
-import me.toptas.fancyshowcase.FocusShape
-import me.toptas.fancyshowcase.OnViewInflateListener
 
 /**
  * Created by luciano on 23/05/17.
@@ -41,11 +38,7 @@ class jugadorAdapter(private val jugadors: MutableList<String>, contexto: Contex
 
     override fun onBindViewHolder(holder: jugadorViewHolder, position: Int) {
         holder.nom.text = jugadors.get(position)
-        if (position <= 1) {
-            holderGuardado = holder
-        }
         if (preferences.getBoolean("tutorial01", true) && position == 1) {
-            holderGuardado = holder
             val act = contexto as Activity
             val imm = contexto.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(act.currentFocus?.windowToken, 0)
@@ -140,34 +133,6 @@ class jugadorAdapter(private val jugadors: MutableList<String>, contexto: Contex
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    companion object {
-        private val contexto: Context? = null
-
-        private var v2: FancyShowCaseView? = null
-
-        private var holderGuardado: jugadorViewHolder? = null
-        @JvmStatic
-        fun obtenerCases(): FancyShowCaseView? {
-            val holder = holderGuardado
-            v2 = FancyShowCaseView.Builder((contexto as Activity))
-                .focusOn(holder!!.nom)
-                .fitSystemWindows(false)
-                .focusShape(FocusShape.ROUNDED_RECTANGLE)
-                .customView(R.layout.custom_tutorial, object : OnViewInflateListener {
-                    override fun onViewInflated(view: View) {
-                        val tv = view.findViewById<View>(R.id.cuerpo) as TextView
-                        tv.text =
-                            "Manten presionado para borrar un jugador y presiona en el lapiz para editar su nombre"
-                        view.findViewById<View>(R.id.closebutton).setOnClickListener(
-                            View.OnClickListener { v2!!.hide() })
-                    }
-                })
-                .closeOnTouch(false)
-                .build()
-            return v2
-        }
-    }
 }
 
 interface itemClickListenerJugadores {

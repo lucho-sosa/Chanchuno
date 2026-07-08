@@ -24,6 +24,15 @@
                 android:textAlignment="center"/>
         </androidx.appcompat.widget.Toolbar>
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adViewMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-6353529381545594/6173125280" />
+
     <EditText
         android:id="@+id/etNombreJugador"
         android:layout_width="match_parent"
@@ -34,7 +43,7 @@
         android:maxLength="20"
         android:maxLines="1"
         android:textSize="20sp"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/adViewMain"
         android:importantForAutofill="no" />
 
     <Button
