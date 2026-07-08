@@ -92,6 +92,7 @@ class MainActivity : AppCompatActivity() {
         btnagregar = findViewById<View>(R.id.btnAgregar) as Button
         btncomenzar = findViewById<View>(R.id.floatingActionButton2) as FloatingActionButton
         adView = findViewById(R.id.adViewMain)
+        adView?.adUnitId = BuildConfig.BANNER_AD_UNIT_ID
         adView?.loadAd(AdRequest.Builder().build())
     }
 

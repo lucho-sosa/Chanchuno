@@ -35,6 +35,7 @@ class partida : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_partida)
         adView = findViewById(R.id.adViewPartida)
+        adView?.adUnitId = BuildConfig.BANNER_AD_UNIT_ID
         adView?.loadAd(AdRequest.Builder().build())
         cargarInterstitial()
 
@@ -110,7 +111,7 @@ class partida : AppCompatActivity() {
     private fun cargarInterstitial() {
         InterstitialAd.load(
             this,
-            INTERSTITIAL_AD_UNIT_ID,
+            BuildConfig.INTERSTITIAL_AD_UNIT_ID,
             AdRequest.Builder().build(),
             object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(ad: InterstitialAd) {
@@ -192,9 +193,5 @@ class partida : AppCompatActivity() {
     override fun onDestroy() {
         adView?.destroy()
         super.onDestroy()
-    }
-
-    companion object {
-        private const val INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-6353529381545594/8607716938"
     }
 }

@@ -28,11 +28,25 @@ android {
             }
         }
     }
+    buildFeatures {
+        buildConfig true
+    }
     buildTypes {
+        debug {
+            // IDs de TEST oficiales de Google: cualquier build de debug muestra
+            // siempre anuncios de test, sin importar el dispositivo.
+            manifestPlaceholders = [admobAppId: "ca-app-pub-3940256099942544~3347511713"]
+            buildConfigField "String", "BANNER_AD_UNIT_ID", "\"ca-app-pub-3940256099942544/6300978111\""
+            buildConfigField "String", "INTERSTITIAL_AD_UNIT_ID", "\"ca-app-pub-3940256099942544/1033173712\""
+        }
         release {
             signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // IDs reales de producción de AdMob.
+            manifestPlaceholders = [admobAppId: "ca-app-pub-6353529381545594~4437099656"]
+            buildConfigField "String", "BANNER_AD_UNIT_ID", "\"ca-app-pub-6353529381545594/6173125280\""
+            buildConfigField "String", "INTERSTITIAL_AD_UNIT_ID", "\"ca-app-pub-6353529381545594/8607716938\""
         }
     }
     namespace 'com.example.luciano.chanchuno'
