@@ -14,13 +14,28 @@
             android:layout_height="wrap_content"
             />
 
-        <ImageView
-            android:id="@+id/editarNombre"
+        <LinearLayout
             android:layout_gravity="end|center_vertical"
-            android:layout_margin="5dp"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
+            android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/borrarNombre"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/eliminar_jugador"
+                app:srcCompat="@android:drawable/ic_menu_delete" />
+
+            <ImageView
+                android:id="@+id/editarNombre"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/editar_jugador"
+                app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        </LinearLayout>
 
 </androidx.cardview.widget.CardView>

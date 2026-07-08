@@ -17,8 +17,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import android.widget.FrameLayout
 import androidx.core.net.toUri
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
 
@@ -91,8 +93,12 @@ class MainActivity : AppCompatActivity() {
         etNombre = findViewById<View>(R.id.etNombreJugador) as EditText
         btnagregar = findViewById<View>(R.id.btnAgregar) as Button
         btncomenzar = findViewById<View>(R.id.floatingActionButton2) as FloatingActionButton
-        adView = findViewById(R.id.adViewMain)
-        adView?.adUnitId = BuildConfig.BANNER_AD_UNIT_ID
+        val adContainer = findViewById<FrameLayout>(R.id.adContainerMain)
+        adView = AdView(this).apply {
+            setAdSize(AdSize.BANNER)
+            adUnitId = BuildConfig.BANNER_AD_UNIT_ID
+        }
+        adContainer.addView(adView)
         adView?.loadAd(AdRequest.Builder().build())
     }
 

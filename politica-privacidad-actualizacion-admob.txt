@@ -1,0 +1,35 @@
+Actualización sugerida para la Política de Privacidad de "Anotador de Chancho Va"
+(agregar esta sección, o reemplazar el párrafo que dice que la app no recopila
+información, ya que desde la versión 0.1.1 la app usa Google AdMob para mostrar
+anuncios)
+
+---
+
+Uso de publicidad (Google AdMob)
+
+Esta aplicación utiliza Google AdMob, un servicio de publicidad de Google LLC,
+para mostrar anuncios dentro de la app. Para poder mostrar y, en algunos casos,
+personalizar esos anuncios, Google AdMob puede recopilar y procesar cierta
+información de tu dispositivo, entre otra:
+
+- El identificador de publicidad de tu dispositivo (Advertising ID / AAID).
+- Información técnica del dispositivo (modelo, sistema operativo, idioma,
+  zona horaria).
+- Dirección IP aproximada (para determinar tu ubicación general, no precisa).
+- Datos de interacción con los anuncios (por ejemplo, si un anuncio se mostró
+  o se tocó).
+
+Esta información no incluye tu nombre, email ni ningún otro dato que te
+identifique personalmente de forma directa, y es gestionada por Google de
+acuerdo a su propia Política de Privacidad, disponible en:
+https://policies.google.com/privacy
+
+Podés controlar la personalización de anuncios en tu dispositivo Android desde:
+Configuración > Google > Anuncios > Eliminar/restablecer el ID de publicidad,
+o desactivando la personalización de anuncios.
+
+El resto de la aplicación (nombres de jugadores, puntajes de la partida, etc.)
+sigue funcionando enteramente en tu dispositivo, sin enviarse a ningún servidor
+nuestro.
+
+Última actualización: 8 de julio de 2026.

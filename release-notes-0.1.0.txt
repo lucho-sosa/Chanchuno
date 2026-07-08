@@ -1,0 +1,5 @@
+Novedades de esta versión:
+- Corregimos un error que podía cerrar la app al agregar un jugador con un nombre inválido.
+- Mejoramos el rendimiento de la pantalla de partida, sobre todo con muchos jugadores.
+- Sumamos anuncios para poder seguir manteniendo la app gratis.
+- Correcciones y mejoras internas.

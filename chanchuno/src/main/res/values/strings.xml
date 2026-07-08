@@ -30,4 +30,6 @@
     <string name="quienes_somos">Somos Thinco una empresa dedicada al desarrollo de aplicaciones de celular, paginas web y sistemas de escritorio.</string>
     <string name="quienes_juegan">¿Quienes juegan?</string>
     <string name="iniciodepartida">inicioDePartida</string>
+    <string name="eliminar_jugador">Eliminar jugador</string>
+    <string name="editar_jugador">Editar nombre</string>
 </resources>

@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.FrameLayout
 import android.widget.ListView
 import android.widget.TextView
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
@@ -34,8 +36,12 @@ class partida : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_partida)
-        adView = findViewById(R.id.adViewPartida)
-        adView?.adUnitId = BuildConfig.BANNER_AD_UNIT_ID
+        val adContainer = findViewById<FrameLayout>(R.id.adContainerPartida)
+        adView = AdView(this).apply {
+            setAdSize(AdSize.BANNER)
+            adUnitId = BuildConfig.BANNER_AD_UNIT_ID
+        }
+        adContainer.addView(adView)
         adView?.loadAd(AdRequest.Builder().build())
         cargarInterstitial()
 

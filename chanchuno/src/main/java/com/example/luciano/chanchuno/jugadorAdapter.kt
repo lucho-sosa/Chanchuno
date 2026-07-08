@@ -103,17 +103,20 @@ class jugadorAdapter(private val jugadors: MutableList<String>, contexto: Contex
         var nom: TextView
         var listener: itemClickListenerJugadores
         var editar: ImageView
+        var borrar: ImageView
 
         init {
             editar = v.findViewById<View>(R.id.editarNombre) as ImageView
+            borrar = v.findViewById<View>(R.id.borrarNombre) as ImageView
             nom = v.findViewById<View>(R.id.tvNombre) as TextView
             nom.textSize = 24.0f
             this.listener = listener
             editar.setOnClickListener(this)
+            borrar.setOnClickListener { confirmarEliminar(v) }
             v.setOnLongClickListener(this)
         }
 
-        override fun onLongClick(v: View): Boolean {
+        private fun confirmarEliminar(v: View) {
             val dialogConfirmacion = AlertDialog.Builder(v.context)
             dialogConfirmacion.setTitle("Eliminar a " + nom.text.toString())
             dialogConfirmacion.setCancelable(true)
@@ -125,6 +128,10 @@ class jugadorAdapter(private val jugadors: MutableList<String>, contexto: Contex
             }
             dialogConfirmacion.setNegativeButton("Cancelar") { dialog, which -> }
             dialogConfirmacion.show()
+        }
+
+        override fun onLongClick(v: View): Boolean {
+            confirmarEliminar(v)
             return true
         }
 
