@@ -8,12 +8,29 @@ android {
         minSdkVersion 23
         //noinspection EditedTargetSdkVersion
         targetSdkVersion 35
-        versionCode 12
-        versionName "0.0.2"
+        versionCode 13
+        versionName "0.1.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+    signingConfigs {
+        release {
+            // Credenciales fuera del repo: definirlas en ~/.gradle/gradle.properties
+            // (NUNCA en el gradle.properties del proyecto, que está commiteado) o como
+            // variables de entorno CHANCHUNO_KEYSTORE_PASSWORD / CHANCHUNO_KEY_ALIAS / CHANCHUNO_KEY_PASSWORD.
+            def keystorePassword = project.findProperty("CHANCHUNO_KEYSTORE_PASSWORD") ?: System.getenv("CHANCHUNO_KEYSTORE_PASSWORD")
+            def alias = project.findProperty("CHANCHUNO_KEY_ALIAS") ?: System.getenv("CHANCHUNO_KEY_ALIAS")
+            def keyPass = project.findProperty("CHANCHUNO_KEY_PASSWORD") ?: System.getenv("CHANCHUNO_KEY_PASSWORD")
+            if (keystorePassword && alias && keyPass) {
+                storeFile rootProject.file("keystore.jks")
+                storePassword keystorePassword
+                keyAlias alias
+                keyPassword keyPass
+            }
+        }
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
