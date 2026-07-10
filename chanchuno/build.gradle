@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 35
@@ -75,6 +76,9 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 
     implementation 'com.google.android.gms:play-services-ads:23.3.0'
+
+    implementation(platform("com.google.firebase:firebase-bom:34.16.0"))
+    implementation 'com.google.firebase:firebase-analytics'
 
     implementation(platform("androidx.compose:compose-bom:2025.06.01"))
     androidTestImplementation(platform("androidx.compose:compose-bom:2025.06.01"))

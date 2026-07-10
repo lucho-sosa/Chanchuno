@@ -18,6 +18,7 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.firebase.analytics.FirebaseAnalytics
 
 class partida : AppCompatActivity() {
     private var lista: ListView? = null
@@ -33,9 +34,13 @@ class partida : AppCompatActivity() {
     private val CHANCHO_NOMBRE = "CHANCHO"
     private val CHANCHO_PERDIO = "CHANCHO VA!"
     private var adapter: PartidaBaseAdapter? = null
+    private var firebaseAnalytics: FirebaseAnalytics? = null
+    private var horaInicio: Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_partida)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        horaInicio = System.currentTimeMillis()
         val adContainer = findViewById<FrameLayout>(R.id.adContainerPartida)
         adView = AdView(this).apply {
             setAdSize(AdSize.BANNER)
@@ -93,6 +98,9 @@ class partida : AppCompatActivity() {
                 val jugadorEliminado = tvNombre.text.toString()
                 jugadoresBackUp.add(jugadorEliminado)
                 jugadors?.remove(jugadorEliminado)
+                firebaseAnalytics?.logEvent("jugador_eliminado", Bundle().apply {
+                    putLong("jugadores_restantes", (jugadors?.size ?: 0).toLong())
+                })
                 if (jugadors?.size == 1) {
                     mostrarGanador()
                 }
@@ -152,6 +160,10 @@ class partida : AppCompatActivity() {
     }
 
     private fun mostrarDialogoGanador() {
+        firebaseAnalytics?.logEvent("partida_finalizada", Bundle().apply {
+            putLong("cantidad_jugadores", jugadores.size.toLong())
+            putLong("duracion_segundos", (System.currentTimeMillis() - horaInicio) / 1000)
+        })
         val builder = AlertDialog.Builder(this)
         val layoutInflater = (getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater)
         val v = layoutInflater.inflate(R.layout.ganador, null)
@@ -174,6 +186,10 @@ class partida : AppCompatActivity() {
     }
 
     private fun reiniciar() {
+        firebaseAnalytics?.logEvent("partida_reiniciada", Bundle().apply {
+            putLong("cantidad_jugadores", jugadoresBackUp.size.toLong())
+        })
+        horaInicio = System.currentTimeMillis()
         for (i in jugadoresBackUp.indices) {
             jugadores[i][0] = jugadoresBackUp[i]
             jugadores[i][1] = ""

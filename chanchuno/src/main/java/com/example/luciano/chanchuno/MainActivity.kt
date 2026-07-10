@@ -22,6 +22,7 @@ import androidx.core.net.toUri
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.google.firebase.analytics.FirebaseAnalytics
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,8 +34,14 @@ class MainActivity : AppCompatActivity() {
     private var lista: RecyclerView? = null
     private var toolbar: Toolbar? = null
     private var adView: AdView? = null
-    private var borrar = false
+    private var firebaseAnalytics: FirebaseAnalytics? = null
     private var jugadors = ArrayList<String>()
+
+    companion object {
+        private const val PREFS_NAME = "chanchuno_prefs"
+        private const val KEY_ULTIMOS_JUGADORES = "ultimos_jugadores"
+        private const val SEPARADOR_JUGADORES = "\n"
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_general, menu)
@@ -45,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         val id = item.itemId
         return when (id) {
             R.id.menuItem02 -> {
+                firebaseAnalytics?.logEvent("reglas_consultadas", null)
                 val intent = Intent(this, comoJugar::class.java)
                 startActivity(intent)
                 true
@@ -82,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-        jugadors = ArrayList()
+        jugadors = cargarUltimosJugadores()
         lista = findViewById<View>(R.id.contenedor) as RecyclerView
         //TODO: revisar mejor como funciona el setHasFixedSize
         lista!!.setHasFixedSize(false)
@@ -100,16 +108,28 @@ class MainActivity : AppCompatActivity() {
         }
         adContainer.addView(adView)
         adView?.loadAd(AdRequest.Builder().build())
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 
     override fun onResume() {
         super.onResume()
         adView?.resume()
-        if (borrar) {
-            jugadors.clear()
-            adapter?.notifyDataSetChanged()
-            borrar = false
+    }
+
+    private fun cargarUltimosJugadores(): ArrayList<String> {
+        val guardados = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+            .getString(KEY_ULTIMOS_JUGADORES, null)
+        if (guardados.isNullOrEmpty()) {
+            return ArrayList()
         }
+        return ArrayList(guardados.split(SEPARADOR_JUGADORES))
+    }
+
+    private fun guardarUltimosJugadores() {
+        getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+            .edit()
+            .putString(KEY_ULTIMOS_JUGADORES, jugadors.joinToString(SEPARADOR_JUGADORES))
+            .apply()
     }
 
     override fun onPause() {
@@ -131,6 +151,7 @@ class MainActivity : AppCompatActivity() {
             var playerName = playerNameTrimmed
             playerName = playerName[0].uppercaseChar().toString() + playerName.substring(1, playerName.length)
             if (jugadors.size == 12) {
+                firebaseAnalytics?.logEvent("limite_maximo_alcanzado", null)
                 Toast.makeText(this, "Maximo 12 jugadores", Toast.LENGTH_SHORT).show()
             } else {
                 if (!jugadors.contains(playerName)) {
@@ -162,7 +183,10 @@ class MainActivity : AppCompatActivity() {
             dialog.setCancelable(true)
             dialog.show()
         } else {
-            borrar = true
+            firebaseAnalytics?.logEvent("partida_iniciada", Bundle().apply {
+                putLong("cantidad_jugadores", jugadors.size.toLong())
+            })
+            guardarUltimosJugadores()
             val intent = Intent(this, partida::class.java)
             intent.putExtra("jugadores", jugadors)
             startActivity(intent)
